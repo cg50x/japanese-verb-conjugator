@@ -55,6 +55,53 @@ export function getFormalPastNegative(wordEntry: JapaneseWordEntry): string {
     return `${verbStem}ませんでした`;
 }
 
+// te-form
+export function getTeForm(wordEntry: JapaneseWordEntry): string {
+    const word = wordEntry.kanji;
+    // ru verb replace te with ru
+    if (wordEntry.verbType === JapaneseVerbType.RU_VERB) {
+        return word.substring(0, word.length - 1) + 'て';
+    }
+
+    if (wordEntry.verbType === JapaneseVerbType.U_VERB) {
+        const lastChar = word.charAt(word.length - 1);
+        switch (lastChar) {
+            case 'う':
+            case 'つ':
+            case 'る':
+                return word.substring(0, word.length - 1) + 'って';
+            case 'む':
+            case 'ぶ':
+            case 'ぬ':
+                return word.substring(0, word.length - 1) + 'んで';
+            case 'く':
+                if (word === '行く') {
+                    return '行って';
+                }
+                return word.substring(0, word.length - 1) + 'いて';
+            case 'ぐ':
+                return word.substring(0, word.length - 1) + 'いで';
+            case 'す':
+                return word.substring(0, word.length - 1) + 'して';
+            default:
+                throw new Error(`Could not determine te form of u verb: ${word}`);
+        }
+    }
+
+    // irregular verbs - suru = shite kuru kite
+    if (wordEntry.verbType === JapaneseVerbType.IRREGULAR_VERB) {
+        if (endsWith(word, '来る')) {
+            return word.substring(0, word.length - 2) + '来て';
+        }
+        if (endsWith(word, 'する')) {
+            return word.substring(0, word.length - 2) + 'して';
+        }
+        throw new Error(`Could not determine te form of unknown irregular verb: ${word}`);
+    }
+
+    throw new Error(`Could not determine te form of verb: ${word}`);
+}
+
 // verb stem
 export function getVerbStem(wordEntry: JapaneseWordEntry): string {
     const word = wordEntry.kanji;
@@ -83,7 +130,6 @@ export function getVerbStem(wordEntry: JapaneseWordEntry): string {
     return word.substring(0, word.length - 1) + iChar;
 }
 
-// TODO te-form
 // TODO short present affirmative
 // TODO short present negative
 // TODO short past affirmative
