@@ -1,4 +1,6 @@
 import {
+    getFormalPastAffirmative,
+    getFormalPastNegative,
     getFormalPresentAffirmative,
     getFormalPresentNegative,
     JapaneseWordEntry,
@@ -58,6 +60,58 @@ const testInputs2: TestInput[] = [
 test('getFormalPresentNegative', () => {
     testInputs2.forEach((testInput: TestInput) => {
         const actual = getFormalPresentNegative(testInput.input);
+        expect(actual).toBe(testInput.output);
+    });
+});
+
+const testInputs3: TestInput[] = [
+    {
+        input: { meaning: 'to see', kanji: '見る', hiragana: 'みる', verbType: JapaneseVerbType.RU_VERB },
+        output: '見ました'
+    },
+    {
+        input: { meaning: 'to hear', kanji: '聞く', hiragana: 'きく', verbType: JapaneseVerbType.U_VERB },
+        output: '聞きました'
+    },
+    {
+        input: { meaning: 'to eat', kanji: '食べる', hiragana: 'たべる', verbType: JapaneseVerbType.RU_VERB },
+        output: '食べました'
+    },
+    {
+        input: { meaning: 'to swim', kanji: '泳ぐ', hiragana: 'およぐ', verbType: JapaneseVerbType.U_VERB },
+        output: '泳ぎました'
+    }
+];
+
+test('getFormalPastAffirmative', () => {
+    testInputs3.forEach((testInput: TestInput) => {
+        const actual = getFormalPastAffirmative(testInput.input);
+        expect(actual).toBe(testInput.output);
+    });
+});
+
+const testInputs4: TestInput[] = [
+    {
+        input: { meaning: 'to see', kanji: '見る', hiragana: 'みる', verbType: JapaneseVerbType.RU_VERB },
+        output: '見ませんでした'
+    },
+    {
+        input: { meaning: 'to hear', kanji: '聞く', hiragana: 'きく', verbType: JapaneseVerbType.U_VERB },
+        output: '聞きませんでした'
+    },
+    {
+        input: { meaning: 'to eat', kanji: '食べる', hiragana: 'たべる', verbType: JapaneseVerbType.RU_VERB },
+        output: '食べませんでした'
+    },
+    {
+        input: { meaning: 'to swim', kanji: '泳ぐ', hiragana: 'およぐ', verbType: JapaneseVerbType.U_VERB },
+        output: '泳ぎませんでした'
+    }
+];
+
+test('getFormalPastNegative', () => {
+    testInputs4.forEach((testInput: TestInput) => {
+        const actual = getFormalPastNegative(testInput.input);
         expect(actual).toBe(testInput.output);
     });
 });

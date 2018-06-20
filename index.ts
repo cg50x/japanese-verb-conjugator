@@ -42,6 +42,18 @@ export function getFormalPresentNegative(wordEntry: JapaneseWordEntry): string {
     return `${verbStem}ません`;
 }
 
+// formal past affirmative
+export function getFormalPastAffirmative(wordEntry: JapaneseWordEntry): string {
+    const verbStem = getVerbStem(wordEntry);
+    return `${verbStem}ました`;
+}
+
+// formal past negative
+export function getFormalPastNegative(wordEntry: JapaneseWordEntry): string {
+    const verbStem = getVerbStem(wordEntry);
+    return `${verbStem}ませんでした`;
+}
+
 // verb stem
 export function getVerbStem(wordEntry: JapaneseWordEntry): string {
     const word = wordEntry.kanji;
@@ -59,9 +71,6 @@ export function getVerbStem(wordEntry: JapaneseWordEntry): string {
     return word.substring(0, word.length - 1) + iChar;
 }
 
-
-// TODO formal past affirmative
-// TODO formal past negative
 // TODO te-form
 // TODO short present affirmative
 // TODO short present negative
