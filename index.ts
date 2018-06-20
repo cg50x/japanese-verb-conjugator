@@ -130,7 +130,12 @@ export function getVerbStem(wordEntry: JapaneseWordEntry): string {
     return word.substring(0, word.length - 1) + iChar;
 }
 
-// TODO short present affirmative
+// short present affirmative
+export function getShortPresentAffirmative(wordEntry: JapaneseWordEntry): string {
+    // Same as dictionary form
+    return wordEntry.kanji;
+}
+
 // TODO short present negative
 // TODO short past affirmative
 // TODO short past negative
