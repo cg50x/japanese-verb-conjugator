@@ -48,7 +48,22 @@ describe('getFormalPresentAffirmative', () => {
         });
     });
 
-    // TODO works with irregular verbs
+    test('works with irregular verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to do', kanji: 'する', hiragana: 'する', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: 'します'
+            },
+            {
+                input: { meaning: 'to come', kanji: '来る', hiragana: 'くる', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: '来ます'
+            }
+        ];
+        inputs.forEach((input: TestInput) => {
+            const actual = getFormalPresentAffirmative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
 });
 
 describe('getFormalPresentNegative', () => {
@@ -88,8 +103,23 @@ describe('getFormalPresentNegative', () => {
             expect(actual).toBe(input.output);
         });
     });
-    
-    // TODO works with irregular verbs
+
+    test('works with irregular verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to do', kanji: 'する', hiragana: 'する', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: 'しません'
+            },
+            {
+                input: { meaning: 'to come', kanji: '来る', hiragana: 'くる', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: '来ません'
+            }
+        ];
+        inputs.forEach((input: TestInput) => {
+            const actual = getFormalPresentNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
 });
 
 describe('getFormalPastAffirmative', () => {
@@ -130,7 +160,22 @@ describe('getFormalPastAffirmative', () => {
         });
     });
     
-    // TODO works with irregular verbs
+    test('works with irregular verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to do', kanji: 'する', hiragana: 'する', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: 'しました'
+            },
+            {
+                input: { meaning: 'to come', kanji: '来る', hiragana: 'くる', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: '来ました'
+            }
+        ];
+        inputs.forEach((input: TestInput) => {
+            const actual = getFormalPastAffirmative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
 });
 
 describe('getFormalPastNegative', () => {
@@ -171,5 +216,20 @@ describe('getFormalPastNegative', () => {
         });
     });
     
-    // TODO works with irregular verbs
+    test('works with irregular verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to do', kanji: 'する', hiragana: 'する', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: 'しませんでした'
+            },
+            {
+                input: { meaning: 'to come', kanji: '来る', hiragana: 'くる', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: '来ませんでした'
+            }
+        ];
+        inputs.forEach((input: TestInput) => {
+            const actual = getFormalPastNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
 });

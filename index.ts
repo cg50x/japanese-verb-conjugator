@@ -15,7 +15,8 @@ const U_VERB_SUFFIX_TO_I: {[suffix: string]: string} =  {
 
 export enum JapaneseVerbType {
     RU_VERB,
-    U_VERB
+    U_VERB,
+    IRREGULAR_VERB
 }
 
 export interface JapaneseWordEntry {
@@ -62,6 +63,17 @@ export function getVerbStem(wordEntry: JapaneseWordEntry): string {
         return word.substring(0, word.length - 1);
     }
 
+    // irregular verb
+    if (wordEntry.verbType === JapaneseVerbType.IRREGULAR_VERB) {
+        if (endsWith(word, '来る')) {
+            return word.substring(0, word.length - 1);
+        }
+        if (endsWith(word, 'する')) {
+            return word.substring(0, word.length - 2) + 'し';
+        }
+        throw new Error('Could not determine verb stem of unknown irregular verb');
+    }
+
     // u-verb
     // Get the last character and find its 'I' character
     const iChar = U_VERB_SUFFIX_TO_I[wordEntry.kanji.charAt(wordEntry.kanji.length - 1)];
@@ -76,3 +88,8 @@ export function getVerbStem(wordEntry: JapaneseWordEntry): string {
 // TODO short present negative
 // TODO short past affirmative
 // TODO short past negative
+
+
+function endsWith(inputString, suffix: string): boolean {
+    return inputString.substr(-1 * suffix.length) === suffix;
+}
