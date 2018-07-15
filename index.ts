@@ -1,5 +1,5 @@
 // Take in the dictionary form of a verb and conjugate it
-
+import { endsWith } from './utils';
 
 const U_VERB_SUFFIX_TO_I: {[suffix: string]: string} =  {
     'う': 'い',
@@ -210,7 +210,3 @@ export function getShortPastNegative(wordEntry: JapaneseWordEntry): string {
     return shortPresent.substring(0, shortPresent.length - 1) + 'かった';
 }
 
-
-function endsWith(inputString, suffix: string): boolean {
-    return inputString.substr(-1 * suffix.length) === suffix;
-}
