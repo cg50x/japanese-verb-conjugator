@@ -13,6 +13,18 @@ const U_VERB_SUFFIX_TO_I: {[suffix: string]: string} =  {
     'る': 'り'
 };
 
+const U_VERB_SUFFIX_TO_ANAI: {[suffix: string]: string} = {
+    'う': 'わない',
+    'く': 'かない',
+    'ぐ': 'がない',
+    'す': 'さない',
+    'つ': 'たない',
+    'ぬ': 'なない',
+    'ぶ': 'ばない',
+    'む': 'まない',
+    'る': 'らない'
+};
+
 export enum JapaneseVerbType {
     RU_VERB,
     U_VERB,
@@ -136,7 +148,43 @@ export function getShortPresentAffirmative(wordEntry: JapaneseWordEntry): string
     return wordEntry.kanji;
 }
 
-// TODO short present negative
+// short present negative
+export function getShortPresentNegative(wordEntry: JapaneseWordEntry): string {
+    const word = wordEntry.kanji;
+    const verbType = wordEntry.verbType;
+    
+    // ru verb
+    if (verbType === JapaneseVerbType.RU_VERB) {
+        return word.substring(0, word.length - 1) + 'ない';
+    }
+    
+    // u verb
+    if (verbType === JapaneseVerbType.U_VERB) {
+        // Handle special case for 'ある'
+        if (word === 'ある') {
+            return 'ない';
+        }
+        // Replace '-u' with '-anai'
+        const suffix = U_VERB_SUFFIX_TO_ANAI[word.charAt(word.length - 1)];
+        if (!suffix) {
+            throw new Error('Could not determine short present negative conjugation of unknown u verb');
+        }
+        return word.substring(0, word.length - 1) + suffix;
+    }
+    
+    // irr verb
+    if (wordEntry.verbType === JapaneseVerbType.IRREGULAR_VERB) {
+        if (endsWith(word, '来る')) {
+            return word.substring(0, word.length - 2) + '来ない';
+        }
+        if (endsWith(word, 'する')) {
+            return word.substring(0, word.length - 2) + 'しない';
+        }
+        throw new Error(`Could not determine short present negative of unknown irregular verb: ${word}`);
+    }
+
+    throw new Error(`Could not determine short present negative of unknown verb: ${word}`);
+}
 // TODO short past affirmative
 // TODO short past negative
 

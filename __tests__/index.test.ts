@@ -5,6 +5,7 @@ import {
     getFormalPresentNegative,
     getTeForm,
     getShortPresentAffirmative,
+    getShortPresentNegative,
     JapaneseWordEntry,
     JapaneseVerbType
 } from '../index';
@@ -378,3 +379,65 @@ describe('getShortPresentAffirmative', () => {
         });
     });
 });
+
+
+// short present negative
+describe('getShortPresentNegative', () => {
+
+    test('works with ru verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to see', kanji: '見る', hiragana: 'みる', verbType: JapaneseVerbType.RU_VERB },
+                output: '見ない'
+            },
+            {
+                input: { meaning: 'to eat', kanji: '食べる', hiragana: 'たべる', verbType: JapaneseVerbType.RU_VERB },
+                output: '食べない'
+            }
+        ];
+
+        inputs.forEach((input: TestInput) => {
+            const actual = getShortPresentNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
+
+    test('works with u verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to hear', kanji: '聞く', hiragana: 'きく', verbType: JapaneseVerbType.U_VERB },
+                output: '聞かない'
+            },
+            {
+                input: { meaning: 'to swim', kanji: '泳ぐ', hiragana: 'およぐ', verbType: JapaneseVerbType.U_VERB },
+                output: '泳がない'
+            }
+        ];
+
+        inputs.forEach((input: TestInput) => {
+            const actual = getShortPresentNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
+    
+    test('works with irregular verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to do', kanji: 'する', hiragana: 'する', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: 'しない'
+            },
+            {
+                input: { meaning: 'to come', kanji: '来る', hiragana: 'くる', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: '来ない'
+            }
+        ];
+        inputs.forEach((input: TestInput) => {
+            const actual = getShortPresentNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
+});
+
+
+// TODO short past affirmative
+// TODO short past negative
