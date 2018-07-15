@@ -14,6 +14,7 @@ I figured if I want to learn Typescript and Japanese at the same time, why not m
 
 Here's a list of my tasks for this project. This list will grow as I keep reading more of the Genki textbooks.
 
+* Short Forms (Chapter 8, 9)
 * Potential Verbs (Chapter 13)
 * Hope or Aspiration (Chapter 11)
 * Volitional Form (Chapter 15)
