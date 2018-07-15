@@ -7,6 +7,7 @@ import {
     getShortPresentAffirmative,
     getShortPresentNegative,
     getShortPastAffirmative,
+    getShortPastNegative,
     JapaneseWordEntry,
     JapaneseVerbType
 } from '../index';
@@ -497,4 +498,59 @@ describe('getShortPastAffirmative', () => {
     });
 });
 
-// TODO short past negative
+// short past negative
+describe('getShortPastNegative', () => {
+
+    test('works with ru verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to see', kanji: '見る', hiragana: 'みる', verbType: JapaneseVerbType.RU_VERB },
+                output: '見なかった'
+            },
+            {
+                input: { meaning: 'to eat', kanji: '食べる', hiragana: 'たべる', verbType: JapaneseVerbType.RU_VERB },
+                output: '食べなかった'
+            }
+        ];
+
+        inputs.forEach((input: TestInput) => {
+            const actual = getShortPastNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
+
+    test('works with u verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to hear', kanji: '聞く', hiragana: 'きく', verbType: JapaneseVerbType.U_VERB },
+                output: '聞かなかった'
+            },
+            {
+                input: { meaning: 'to swim', kanji: '泳ぐ', hiragana: 'およぐ', verbType: JapaneseVerbType.U_VERB },
+                output: '泳がなかった'
+            }
+        ];
+
+        inputs.forEach((input: TestInput) => {
+            const actual = getShortPastNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
+    
+    test('works with irregular verbs', () => {
+        const inputs: TestInput[] = [
+            {
+                input: { meaning: 'to do', kanji: 'する', hiragana: 'する', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: 'しなかった'
+            },
+            {
+                input: { meaning: 'to come', kanji: '来る', hiragana: 'くる', verbType: JapaneseVerbType.IRREGULAR_VERB },
+                output: '来なかった'
+            }
+        ];
+        inputs.forEach((input: TestInput) => {
+            const actual = getShortPastNegative(input.input);
+            expect(actual).toBe(input.output);
+        });
+    });
+});

@@ -203,7 +203,12 @@ export function getShortPastAffirmative(wordEntry: JapaneseWordEntry): string {
     return teForm.substring(0, teForm.length - 1) + suffix;
 }
 
-// TODO short past negative
+// short past negative
+export function getShortPastNegative(wordEntry: JapaneseWordEntry): string {
+    // Just get the short present negative form and replace -i with -katta
+    const shortPresent = getShortPresentNegative(wordEntry);
+    return shortPresent.substring(0, shortPresent.length - 1) + 'かった';
+}
 
 
 function endsWith(inputString, suffix: string): boolean {
