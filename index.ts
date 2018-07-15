@@ -25,6 +25,11 @@ const U_VERB_SUFFIX_TO_ANAI: {[suffix: string]: string} = {
     'る': 'らない'
 };
 
+const TE_FORM_SUFFIX_TO_A: {[suffix: string]: string} = {
+    'て': 'た',
+    'で': 'だ'
+};
+
 export enum JapaneseVerbType {
     RU_VERB,
     U_VERB,
@@ -185,7 +190,19 @@ export function getShortPresentNegative(wordEntry: JapaneseWordEntry): string {
 
     throw new Error(`Could not determine short present negative of unknown verb: ${word}`);
 }
-// TODO short past affirmative
+
+// short past affirmative
+export function getShortPastAffirmative(wordEntry: JapaneseWordEntry): string {
+    // Convert to the te form
+    const teForm = getTeForm(wordEntry);
+
+    const suffix = TE_FORM_SUFFIX_TO_A[teForm.charAt(teForm.length - 1)];
+    if (!suffix) {
+        throw new Error(`Could not determine short past affirmative for word: ${wordEntry.kanji}`);
+    }
+    return teForm.substring(0, teForm.length - 1) + suffix;
+}
+
 // TODO short past negative
 
 
