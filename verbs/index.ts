@@ -1,52 +1,17 @@
 // Take in the dictionary form of a verb and conjugate it
-import { endsWith } from './utils';
+import { endsWith } from '../utils';
 
-const U_VERB_SUFFIX_TO_I: {[suffix: string]: string} =  {
-    'う': 'い',
-    'く': 'き',
-    'ぐ': 'ぎ',
-    'す': 'し',
-    'つ': 'ち',
-    'ぬ': 'に',
-    'ぶ': 'び',
-    'む': 'み',
-    'る': 'り'
-};
+import { U_VERB_SUFFIX_TO_I, U_VERB_SUFFIX_TO_ANAI, TE_FORM_SUFFIX_TO_A } from './constants';
+import { JapaneseWordEntry } from './word-entry';
+import { JapaneseVerbType } from './verb-types';
 
-const U_VERB_SUFFIX_TO_ANAI: {[suffix: string]: string} = {
-    'う': 'わない',
-    'く': 'かない',
-    'ぐ': 'がない',
-    'す': 'さない',
-    'つ': 'たない',
-    'ぬ': 'なない',
-    'ぶ': 'ばない',
-    'む': 'まない',
-    'る': 'らない'
-};
+export { JapaneseWordEntry } from './word-entry';
+export { JapaneseVerbType } from './verb-types';
 
-const TE_FORM_SUFFIX_TO_A: {[suffix: string]: string} = {
-    'て': 'た',
-    'で': 'だ'
-};
 
-export enum JapaneseVerbType {
-    RU_VERB,
-    U_VERB,
-    IRREGULAR_VERB
-}
-
-export interface JapaneseWordEntry {
-    // Meaning of the word
-    meaning: string;
-    // The word with kanji characters
-    kanji: string;
-    // The word with only hirgana characters
-    hiragana: string;
-    // The type of the verb (ru-verb or u-verb)
-    verbType: JapaneseVerbType;
-}
-
+// ============================================================================
+// Formal Conjugations
+// ============================================================================
 
 // formal present affirmative
 export function getFormalPresentAffirmative(wordEntry: JapaneseWordEntry): string {
@@ -71,6 +36,79 @@ export function getFormalPastNegative(wordEntry: JapaneseWordEntry): string {
     const verbStem = getVerbStem(wordEntry);
     return `${verbStem}ませんでした`;
 }
+
+
+// ============================================================================
+// Short Form Conjugations
+// ============================================================================
+
+// short present affirmative
+export function getShortPresentAffirmative(wordEntry: JapaneseWordEntry): string {
+    // Same as dictionary form
+    return wordEntry.kanji;
+}
+
+// short present negative
+export function getShortPresentNegative(wordEntry: JapaneseWordEntry): string {
+    const word = wordEntry.kanji;
+    const verbType = wordEntry.verbType;
+    
+    // ru verb
+    if (verbType === JapaneseVerbType.RU_VERB) {
+        return word.substring(0, word.length - 1) + 'ない';
+    }
+    
+    // u verb
+    if (verbType === JapaneseVerbType.U_VERB) {
+        // Handle special case for 'ある'
+        if (word === 'ある') {
+            return 'ない';
+        }
+        // Replace '-u' with '-anai'
+        const suffix = U_VERB_SUFFIX_TO_ANAI[word.charAt(word.length - 1)];
+        if (!suffix) {
+            throw new Error('Could not determine short present negative conjugation of unknown u verb');
+        }
+        return word.substring(0, word.length - 1) + suffix;
+    }
+    
+    // irr verb
+    if (wordEntry.verbType === JapaneseVerbType.IRREGULAR_VERB) {
+        if (endsWith(word, '来る')) {
+            return word.substring(0, word.length - 2) + '来ない';
+        }
+        if (endsWith(word, 'する')) {
+            return word.substring(0, word.length - 2) + 'しない';
+        }
+        throw new Error(`Could not determine short present negative of unknown irregular verb: ${word}`);
+    }
+
+    throw new Error(`Could not determine short present negative of unknown verb: ${word}`);
+}
+
+// short past affirmative
+export function getShortPastAffirmative(wordEntry: JapaneseWordEntry): string {
+    // Convert to the te form
+    const teForm = getTeForm(wordEntry);
+
+    const suffix = TE_FORM_SUFFIX_TO_A[teForm.charAt(teForm.length - 1)];
+    if (!suffix) {
+        throw new Error(`Could not determine short past affirmative for word: ${wordEntry.kanji}`);
+    }
+    return teForm.substring(0, teForm.length - 1) + suffix;
+}
+
+// short past negative
+export function getShortPastNegative(wordEntry: JapaneseWordEntry): string {
+    // Just get the short present negative form and replace -i with -katta
+    const shortPresent = getShortPresentNegative(wordEntry);
+    return shortPresent.substring(0, shortPresent.length - 1) + 'かった';
+}
+
+
+// ============================================================================
+// Other Conjugations
+// ============================================================================
 
 // te-form
 export function getTeForm(wordEntry: JapaneseWordEntry): string {
@@ -146,67 +184,3 @@ export function getVerbStem(wordEntry: JapaneseWordEntry): string {
     }
     return word.substring(0, word.length - 1) + iChar;
 }
-
-// short present affirmative
-export function getShortPresentAffirmative(wordEntry: JapaneseWordEntry): string {
-    // Same as dictionary form
-    return wordEntry.kanji;
-}
-
-// short present negative
-export function getShortPresentNegative(wordEntry: JapaneseWordEntry): string {
-    const word = wordEntry.kanji;
-    const verbType = wordEntry.verbType;
-    
-    // ru verb
-    if (verbType === JapaneseVerbType.RU_VERB) {
-        return word.substring(0, word.length - 1) + 'ない';
-    }
-    
-    // u verb
-    if (verbType === JapaneseVerbType.U_VERB) {
-        // Handle special case for 'ある'
-        if (word === 'ある') {
-            return 'ない';
-        }
-        // Replace '-u' with '-anai'
-        const suffix = U_VERB_SUFFIX_TO_ANAI[word.charAt(word.length - 1)];
-        if (!suffix) {
-            throw new Error('Could not determine short present negative conjugation of unknown u verb');
-        }
-        return word.substring(0, word.length - 1) + suffix;
-    }
-    
-    // irr verb
-    if (wordEntry.verbType === JapaneseVerbType.IRREGULAR_VERB) {
-        if (endsWith(word, '来る')) {
-            return word.substring(0, word.length - 2) + '来ない';
-        }
-        if (endsWith(word, 'する')) {
-            return word.substring(0, word.length - 2) + 'しない';
-        }
-        throw new Error(`Could not determine short present negative of unknown irregular verb: ${word}`);
-    }
-
-    throw new Error(`Could not determine short present negative of unknown verb: ${word}`);
-}
-
-// short past affirmative
-export function getShortPastAffirmative(wordEntry: JapaneseWordEntry): string {
-    // Convert to the te form
-    const teForm = getTeForm(wordEntry);
-
-    const suffix = TE_FORM_SUFFIX_TO_A[teForm.charAt(teForm.length - 1)];
-    if (!suffix) {
-        throw new Error(`Could not determine short past affirmative for word: ${wordEntry.kanji}`);
-    }
-    return teForm.substring(0, teForm.length - 1) + suffix;
-}
-
-// short past negative
-export function getShortPastNegative(wordEntry: JapaneseWordEntry): string {
-    // Just get the short present negative form and replace -i with -katta
-    const shortPresent = getShortPresentNegative(wordEntry);
-    return shortPresent.substring(0, shortPresent.length - 1) + 'かった';
-}
-

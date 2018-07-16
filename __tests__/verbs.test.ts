@@ -10,7 +10,7 @@ import {
     getShortPastNegative,
     JapaneseWordEntry,
     JapaneseVerbType
-} from '../index';
+} from '../verbs';
 
 interface TestInput {
     input: JapaneseWordEntry,
