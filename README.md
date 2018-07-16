@@ -18,7 +18,7 @@ Here's a list of my tasks for this project. This list will grow as I keep readin
 * Potential Verbs (Chapter 13)
 * Hope or Aspiration (Chapter 11)
 * Volitional Form (Chapter 15)
-* Adjective conjugations (Chapter 5)
+* ~~Adjective conjugations (Chapter 5)~~
 
 ## How to run
 1. Run `npm install`
